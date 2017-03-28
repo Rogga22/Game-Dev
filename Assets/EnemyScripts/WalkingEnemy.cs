@@ -11,6 +11,11 @@ public class WalkingEnemy : MonoBehaviour {
     bool playerInRange;                         // Whether player is within the trigger collider and can be attacked.
     public float timer;                                // Timer for counting up to the next attack.
 
+    public Sprite sprtslp;
+    public Sprite sprtwake;
+
+    public bool faceright;
+
     SpriteRenderer enemycolor;
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 1f);
@@ -43,8 +48,11 @@ public class WalkingEnemy : MonoBehaviour {
         dist = Vector3.Distance(player.transform.position, transform.position);
         angle = (player.transform.position - transform.position).normalized;
 
+        
+
         if (activeenemy.active == true && dist <= range)
         {
+            enemycolor.sprite = sprtwake;
             // Add the time since Update was last called to the timer.
             timer += Time.deltaTime;
             range = maxrange;
@@ -68,6 +76,20 @@ public class WalkingEnemy : MonoBehaviour {
             {
                 playerInRange = false;
             }
+
+            if(player.transform.position.x > transform.position.x && !faceright)
+            {
+                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+                faceright = true;
+            } if (player.transform.position.x < transform.position.x && faceright)
+            {
+                transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+                faceright = false;
+            }
+
+        } else
+        {
+            enemycolor.sprite = sprtslp;
         }
     }
 
