@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class KeyControl : MonoBehaviour {
 
+    public AudioClip keypick;
+
+    AudioSource source;
     GameObject player;
     PlayerKeys playkey;
 
@@ -11,6 +14,7 @@ public class KeyControl : MonoBehaviour {
 	void Awake () {
         player = GameObject.FindGameObjectWithTag("Player");
         playkey = player.GetComponent<PlayerKeys>();
+        source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -22,8 +26,9 @@ public class KeyControl : MonoBehaviour {
     {
        if (other.gameObject == player)
         {
+            source.PlayOneShot(keypick, 1f);
             playkey.keycount += 1;
-            Destroy(gameObject);
+            Destroy(gameObject, .05f);
         }
     }
 }

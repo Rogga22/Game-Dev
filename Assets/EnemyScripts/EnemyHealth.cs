@@ -4,11 +4,13 @@ using System;
 
 public class EnemyHealth : MonoBehaviour {
 
+    public AudioClip gethit;
 	public int startingHealth = 5;            // The amount of health the enemy starts the game with.
 	public int currentHealth;                   // The current health the enemy has.
     public bool active;
     public float deathtime;
 
+    AudioSource source;
     SpriteRenderer enemycolor;
     public float flashSpeed = 5f;
     public Color flashColour = new Color(1f, 0f, 0f, 1f);
@@ -24,6 +26,7 @@ public class EnemyHealth : MonoBehaviour {
 		currentHealth = startingHealth;
         enemycolor = GetComponent<SpriteRenderer>();
         defaultcolor = enemycolor.color;
+        source = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -51,9 +54,10 @@ public class EnemyHealth : MonoBehaviour {
 		if(isDead)
 			// ... no need to take damage so exit the function.
 			return;
-		
-		// Reduce the current health by the amount of damage sustained.
-		currentHealth -= amount;
+
+        source.PlayOneShot(gethit, 1f);
+        // Reduce the current health by the amount of damage sustained.
+        currentHealth -= amount;
         damaged = true;
 
 		// If the current health is less than or equal to zero...

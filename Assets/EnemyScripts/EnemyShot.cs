@@ -8,6 +8,7 @@ public class EnemyShot : MonoBehaviour {
     GameObject player;
     GameObject[] walls;
     GameObject[] doors;
+    public float damage;
 
     PlayerHealth hitplayer;
 
@@ -32,7 +33,7 @@ public class EnemyShot : MonoBehaviour {
             if (other.gameObject == player)
             {
                 hitplayer = player.GetComponent<PlayerHealth>();
-                hitplayer.TakeDamage(1);
+                hitplayer.TakeDamage(damage);
                 Destroy(gameObject);
             }
         foreach (GameObject walls in walls)

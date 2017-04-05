@@ -3,22 +3,26 @@ using System.Collections;
 
 public class PlayerHealth : MonoBehaviour {
 
-	public int startingHealth;                            // The amount of health the player starts the game with.
-	public int currentHealth;                                   // The current health the player has.
+	public float startingHealth;                            // The amount of health the player starts the game with.
+	public float currentHealth;                                   // The current health the player has.
 	public float flashSpeed = 5f;                               // The speed the damageImage will fade at.
 	public Color flashColour = new Color(1f, 0f, 0f, 1f);     // The colour the damageImage is set to, to flash.
     public Color deathcolor;
 
-	SpriteRenderer playercolor;
+    public AudioClip takedamage;
+	SpriteRenderer playercolor;                                 //Reference to player's color
 	PlayerController playerMovement;                            // Reference to the player's movement.
+    AudioSource source;
 	bool isDead;                                                // Whether the player is dead.
 	bool damaged;                                               // True when the player gets damaged.
+
 
 	void Awake ()
 	{
 		// Setting up the references.
 		playercolor = GetComponent<SpriteRenderer>();
 		playerMovement = GetComponent<PlayerController> ();
+        source = GetComponent<AudioSource>();
 		
 		// Set the initial health of the player.
 		currentHealth = startingHealth;
@@ -48,11 +52,11 @@ public class PlayerHealth : MonoBehaviour {
 		damaged = false;
 	}
 
-	public void TakeDamage (int amount)
+	public void TakeDamage (float amount)
 	{
 		// Set the damaged flag so the screen will flash.
 		damaged = true;
-		
+        source.PlayOneShot(takedamage, .5f);
 		// Reduce the current health by the damage amount.
 		currentHealth -= amount;
 

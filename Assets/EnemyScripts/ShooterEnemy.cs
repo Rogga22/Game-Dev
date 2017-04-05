@@ -56,6 +56,8 @@ public class ShooterEnemy : MonoBehaviour {
         shootCooldown = 0f;
         shotangle = (player.transform.position - transform.position).normalized;
         var bullet = (GameObject)Instantiate(bulletprefab, transform.position, transform.rotation);
+        bullet.GetComponent<EnemyShot>().damage = 1;
         bullet.GetComponent<Rigidbody2D>().AddForce(shotangle * bulletspeed);
+
     }
 }

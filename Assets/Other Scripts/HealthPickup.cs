@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class HealthPickup : MonoBehaviour {
 
+    public AudioClip healthpick;
+
     GameObject player;
     PlayerHealth playhp;
+    AudioSource source;
 
     // Use this for initialization
     void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playhp = player.GetComponent<PlayerHealth>();
+        source = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -24,8 +28,9 @@ public class HealthPickup : MonoBehaviour {
     {
         if (other.gameObject == player && playhp.currentHealth < playhp.startingHealth)
         {
+            source.PlayOneShot(healthpick, 1f);
             playhp.currentHealth += 1;
-            Destroy(gameObject);
+            Destroy(gameObject, .05f);
         }
     }
 }

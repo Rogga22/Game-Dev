@@ -49,63 +49,70 @@ public class BossScript : MonoBehaviour {
 
     void FixedUpdate()
     {
-        dist = Vector3.Distance(player.transform.position, transform.position);
-        angle = (player.transform.position - transform.position).normalized;
-
-        if (activeenemy.isDead)
+        if (playerHealth.currentHealth > 0)
         {
-            if (!dropkey)
+            dist = Vector3.Distance(player.transform.position, transform.position);
+            angle = (player.transform.position - transform.position).normalized;
+
+            if (activeenemy.isDead)
             {
-                Instantiate(keydrop, transform.position, transform.rotation);
-                Instantiate(keydrop, transform.position, transform.rotation);
-                dropkey = true;
+                if (!dropkey)
+                {
+                    Instantiate(keydrop, transform.position, transform.rotation);
+                    Instantiate(keydrop, transform.position, transform.rotation);
+                    dropkey = true;
+                }
             }
-        } else {
-
-            if (activeenemy.active == true && dist <= range)
+            else
             {
-                // Add the time since Update was last called to the timer.
-                timer += Time.deltaTime;
-                range = maxrange;
 
-                transform.position += angle * movespd * Time.deltaTime;
-
-                shootCooldown += Time.deltaTime;
-
-
-                if (shootCooldown >= shootingRate)
+                if (activeenemy.active == true && dist <= range)
                 {
-                    ShootAttack();
-                }
-                if (shootCooldown >= shootingRate + 2)
-                    shootCooldown = 0;
+                    // Add the time since Update was last called to the timer.
+                    timer += Time.deltaTime;
+                    range = maxrange;
+
+                    transform.position += angle * movespd * Time.deltaTime;
+
+                    shootCooldown += Time.deltaTime;
 
 
-                // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
-                if (timer >= timeBetweenAttacks && playerInRange)
-                {
-                    // ... attack.
-                    MeleeAttack();
-                    enemycolor.color = flashColour;
-                }
-                else
-                {
-                    enemycolor.color = Color.Lerp(enemycolor.color, defaultcolor, flashSpeed * Time.deltaTime);
-                }
+                    if (shootCooldown >= shootingRate)
+                    {
+                        ShootAttack();
+                    }
+                    if (shootCooldown >= shootingRate + 2)
+                        shootCooldown = 0;
 
-                // If the player has zero or less health...
-                if (playerHealth.currentHealth <= 0)
-                {
-                    playerInRange = false;
+
+                    // If the timer exceeds the time between attacks, the player is in range and this enemy is alive...
+                    if (timer >= timeBetweenAttacks && playerInRange)
+                    {
+                        // ... attack.
+                        MeleeAttack();
+                        enemycolor.color = flashColour;
+                    }
+                    else
+                    {
+                        enemycolor.color = Color.Lerp(enemycolor.color, defaultcolor, flashSpeed * Time.deltaTime);
+                    }
                 }
             }
         }
+
+        // If the player has zero or less health...
+        if (playerHealth.currentHealth <= 0)
+        {
+            playerInRange = false;
+        }
+
     }
 
     void ShootAttack()
     {
         angle = (player.transform.position - transform.position).normalized;
         var bullet = (GameObject)Instantiate(bulletprefab, transform.position, transform.rotation);
+        bullet.GetComponent<EnemyShot>().damage = .3f;
         bullet.GetComponent<Rigidbody2D>().AddForce(angle * bulletspeed);
     }
 

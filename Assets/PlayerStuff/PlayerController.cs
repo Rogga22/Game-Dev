@@ -3,12 +3,15 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
+
+    public AudioClip shooty;
 	public float speed;             //Floating point variable to store the player's movement speed.
     public float bulletspeed;
     public GameObject bulletprefab;
     public Transform bulletSpawn;
     private Vector3 direction;
 
+    AudioSource source;
     SpriteRenderer spr;
     public Sprite idleup;
     public Sprite idledown;
@@ -23,8 +26,8 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         direction = Vector3.down;
         spr = GetComponent<SpriteRenderer>();
-
-	}
+        source = GetComponent<AudioSource>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -79,6 +82,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            source.PlayOneShot(shooty, .5f);
             var bullet = (GameObject)Instantiate(bulletprefab, bulletSpawn.position, bulletSpawn.rotation);
             bullet.GetComponent<Rigidbody2D>().AddForce(direction * bulletspeed);
         }
